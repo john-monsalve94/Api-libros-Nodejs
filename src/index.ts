@@ -3,7 +3,6 @@ import { sequelize } from './database/connection';
 import { typeDefs } from './graphql/schema';
 import { resolvers } from './graphql/resolvers';
 
-
 //  Iniciamos el servidor
 const server = new ApolloServer({ typeDefs, resolvers });
 
