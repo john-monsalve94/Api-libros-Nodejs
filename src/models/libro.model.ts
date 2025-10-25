@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/connection';
+import { Autor } from './autor.model';
 // estamos creando el molde o estructura de los libros
 export const Libro = sequelize.define('Libro', {
   id: {
@@ -19,3 +20,6 @@ export const Libro = sequelize.define('Libro', {
     type: DataTypes.INTEGER,
   },
 });
+
+Autor.hasMany(Libro,{foreignKey:'autorId'});
+Libro.belongsTo(Autor,{foreignKey:'autorId'});

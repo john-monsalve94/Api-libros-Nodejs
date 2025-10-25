@@ -1,38 +1,8 @@
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer} from 'apollo-server';
 import { sequelize } from './database/connection';
-import { Libro } from './models/libro.model';
-//  Tipos de datos
-const typeDefs = gql`
-  type Libro {
-    id: ID!
-    titulo: String
-    autor: String
-    anio: Int
-  }
+import { typeDefs } from './graphql/schema';
+import { resolvers } from './graphql/resolvers';
 
-  type Query {
-    libros: [Libro]
-  }
-
-  #  Nueva sección: Mutations (acciones para modificar datos)
-  type Mutation {
-    agregarLibro(titulo: String, autor: String, anio: Int): Libro
-  }
-`;
-
-// Resolvers (Acciones)
-const resolvers = {
-  Query: {
-    libros: async () => await Libro.findAll()
-  },
-  Mutation: {
-    // agregar un libro
-    agregarLibro: async (_: any, args: { titulo: string; autor: string; anio: number }) => {
-      const nuevoLibro = await Libro.create(args);
-      return nuevoLibro;
-    }
-  }
-};
 
 //  Iniciamos el servidor
 const server = new ApolloServer({ typeDefs, resolvers });
