@@ -3,25 +3,48 @@ import { Libro } from '../models/libro.model';
 
 export const resolvers = {
   Query: {
-    autores: async () => Autor.findAll(),
+    autores: async () => {
+      const response = await Autor.findAll()
+      console.log(response)
+      const responseAuthors = response.map(
+        dataValues => {
+          console.log(dataValues)
+          return ({
+            id: dataValues.dataValues.id,
+            autor: dataValues.dataValues.nombre
+          })
+        })
+      return responseAuthors
+    },
     libros: async () => Libro.findAll({ include: [Autor] }),
   },
 
   Mutation: {
-    agregarAutor: async (_: any, { nombre }: any) => {
-      return await Autor.create({ nombre });
+    agregarAutor: async (_: any, { autor }: any) => {
+      return await Autor.create({ nombre: autor });
     },
 
-    agregarLibro: async (_: any, { titulo, anio, autorNombre }: any) => {
-      const autor: any = await Autor.findOne({ where: { nombre: autorNombre } });
-      if (!autor) throw new Error('Autor no encontrado');
+    agregarLibro: async (_: any, { titulo, anio, autor }: any) => {
+      //  Buscar si el autor ya existe
+      let autorEncontrado = await Autor.findOne({ where: { nombre: autor } }) as any;
 
-      return await Libro.create({
+      //  Si no existe, lo creamos
+      if (!autorEncontrado) {
+        autorEncontrado = await Autor.create({ nombre: autor });
+        console.log(`Autor "${autor}" creado automáticamente`);
+      }
+
+      //  Crear el libro asociado al autor encontrado o recién creado
+      const nuevoLibro = await Libro.create({
         titulo,
         anio,
-        autorId: autor.getDataValue('id'),
+        autorId: autorEncontrado.id,
       });
-    },
+
+      //  Retornar el nuevo libro
+      return nuevoLibro;
+    }
+
   },
 
   Autor: {
@@ -33,6 +56,7 @@ export const resolvers = {
   Libro: {
     autor: async (parent: any) => {
       return await Autor.findByPk(parent.autorId);
-    },
-  },
+    }
+  }
+
 };

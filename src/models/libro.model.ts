@@ -14,7 +14,7 @@ export const Libro = sequelize.define('Libro', {
   },
   autor: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   anio: {
     type: DataTypes.INTEGER,

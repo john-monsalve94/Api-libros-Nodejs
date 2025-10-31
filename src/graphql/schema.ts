@@ -21,6 +21,6 @@ export const typeDefs = gql`
   #  Nueva sección: Mutations (acciones para modificar datos)
   type Mutation {
     agregarLibro(titulo: String, autor: String, anio: Int): Libro
-    agregarAutor(nombre: String!,): Autor
+    agregarAutor(autor: String!,): Autor
   }
 `;

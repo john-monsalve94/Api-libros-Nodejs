@@ -9,6 +9,6 @@ export const Autor = sequelize.define('Autor', {
   },
   nombre: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
 });
