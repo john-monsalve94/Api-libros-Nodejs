@@ -22,5 +22,9 @@ export const typeDefs = gql`
   type Mutation {
     agregarLibro(titulo: String, autor: String, anio: Int): Libro
     agregarAutor(autor: String!,): Autor
+    actualizarAutor(id:ID!,nombre:String,):Autor
+    eliminarAutor(id:ID!):String
+    actualizarLibro(id:ID!,titulo:String,autor:String,anio:Int):Libro
+
   }
 `;
